@@ -1,7 +1,13 @@
 # ekkesQtCMakeLists
 ekke's CMakeLists.txt for mobile business apps (Android, iOS) with Qt 6.7+
 
-ekke ported some mobile apps from Qt 5.15 (QMake) to Qt 6.6+ (QMake). See: [ekkes Checklist](https://t1p.de/ekkeChecklist)
+### Background
+ekke ported mobile apps from Qt 5.15 (QMake) to Qt 6.6+ (QMake). See: [ekkes Checklist](https://t1p.de/ekkeChecklist)
+
+ekke supports up to 20 mobile business apps, but doesn't want to support 20 different CMakeLists.txt ;-)
+
+While moving from QMake to CMake ekke's CMakeLists.txt example was created and will be used to build all of ekke's apps with CMake.
+Hopefully this will help other devs with their CMakeLists.txt.
 
 ### QMake to CMake
 
@@ -28,4 +34,8 @@ Also some helpful files can be downloaded from here:
 * ...
 
 ---
-W I P - All is work-in-progress. Not all variations in ekke's CMakeLists have been tested yet. stay tuned...
+**W I P - All is work-in-progress.**
+Not all variations in ekke's CMakeLists have been tested yet. stay tuned...
+
+---
+Disclaimer: ekke started with no knowledge about CMake, also dealing with build systems isn't ekke's domain. If there's something wrong or can be done better/easier, please let ekke know about
