@@ -1,6 +1,9 @@
 # ekkesQtCMakeLists
 ekke's CMakeLists.txt for mobile business apps (Android, iOS) with Qt 6.7+
 
+## Warning
+This CMakeLists.txt is specialized for mobile apps and projects with nested subfolders (QML, Resources) - typically QMake projects ported from Qt 5.15. For non-mobile QML apps take a look at [Building a QML Application](https://doc.qt.io/qt-6/cmake-build-qml-application.html)
+
 ### Background
 ekke ported mobile apps from Qt 5.15 (QMake) to Qt 6.6+ (QMake). See: [ekkes Checklist](https://t1p.de/ekkeChecklist)
 
