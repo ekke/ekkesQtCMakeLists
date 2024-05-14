@@ -12,15 +12,13 @@ ekke supports up to 20 mobile business apps, but doesn't want to support 20 diff
 While moving from QMake to CMake ekke's CMakeLists.txt example was created and will be used to build all of ekke's apps with CMake.
 Hopefully this will help other devs with their CMakeLists.txt.
 
-### QMake to CMake
+### CMake for Mobile
 
-As next step: Port from QMake to CMake. All the details about [CMake for Mobile Qt 6.7+ Apps](https://t1p.de/ekkeCMakeMobileApps)
+All the details about [CMake for Mobile (Qt 6.7+) Apps](https://t1p.de/ekkeCMakeMobileApps)
 
-ekke's apps in Qt 5.15 uses nested subdirs for C++, QML, Resources. This isn't so easy to handle with CMake. Take a look at [ekkes Project Structure](https://t1p.de/ekkesProjectStructure) and [qt_add_qml_module](https://t1p.de/ekkeCMakeQMLModule) and discussions at [QTBUG-111763](https://bugreports.qt.io/browse/QTBUG-111763)
+ekke's apps in Qt 5.15 are organized with nested folders for C++, QML, Resources. This isn't so easy to handle, as the folders do not contain any modules. Take a look at [ekkes Project Structure](https://t1p.de/ekkesProjectStructure) and [qt\_add\_qml_module](https://t1p.de/ekkeCMakeQMLModule) and discussions at [QTBUG-111763](https://bugreports.qt.io/browse/QTBUG-111763)
 
-[ekke's CMakeLists.txt](https://t1p.de/ekkeCMakeLists) provides solutions HowTo deal with nested subdirs.
-
-This Repo is an Add-On to ekke's CMakeLists.txt. Makes it easier to discuss issues and to follow changes.
+This Repo is an Add-On to ekke's blog articles about CMakeLists for mobile. Makes it easier to discuss issues and to follow changes. [ekke's CMakeLists.txt](https://t1p.de/ekkeCMakeLists) provides solutions HowTo deal with nested subdirs and Android / iOS with CMake.
 
 ### Download helpful files
 
@@ -32,8 +30,7 @@ Also some helpful files can be downloaded from here:
 * ios assets: Icons, Storyboard 
 * ekke's ios/Info.plist
 * some snippets for ios/Info.plist
-* QtC external tools
-* macOS scripts
+* QtC external tools and macOS scripts to collect filenames
 * ...
 
 ---
