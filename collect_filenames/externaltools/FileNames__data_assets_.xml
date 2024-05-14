@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Written on Mon Feb 5 18:22:49 2024 by Qt Creator 11.0.2-->
+<externaltool id="FileNames__data_assets_">
+    <description>Collects filenames from data-assets</description>
+    <displayname>FileNames (data-assets)</displayname>
+    <category>CMake</category>
+    <order>9</order>
+    <executable output="showinpane" error="showinpane" modifiesdocument="no">
+        <path>/Applications/daten/_QT/QtCreator-ExternalTools/my_data-assets_files.sh</path>
+        <arguments>%{CurrentDocument:Project:Path}</arguments>
+        <workingdirectory>%{CurrentDocument:Project:Path}</workingdirectory>
+    </executable>
+</externaltool>

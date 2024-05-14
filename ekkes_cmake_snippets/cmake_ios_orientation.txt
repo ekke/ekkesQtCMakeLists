@@ -1,0 +1,103 @@
+cmake_ios_orientation.txt
+2024-05-14
+
+Orientation cannot be set via XCODE_ATTRIBUTES
+Orientation checkboxes in Xcode General Tab aren't synchronized
+
+UIRequiresFullScreen cannot be set via XCODE_ATTRIBUTES
+Requires FullScreen checkbox in Xcode General Tab not synchronized
+
+Orientations:
+ATM only way to set manually in Info.plist.
+In ekke's CMake Info.plist all directions for iPhone and iPad are allowed
+remove not-allowed-directions or device
+hint: in many cases for iPhones 'UIInterfaceOrientationPortraitUpsideDown' will be removed
+
+Requires FullScreen:
+UIRequiresFullScreen only valid for iPad, if your app needs the whole space - makes sense in business apps.
+
+info.plist settings:
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+    <string>UIInterfaceOrientationPortrait</string>
+    <string>UIInterfaceOrientationPortraitUpsideDown</string>
+    <string>UIInterfaceOrientationLandscapeLeft</string>
+    <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UIRequiresFullScreen</key>
+    <true/>
+
+------------------------ NOT IN USE - DOESNT WORK: -------------------------------
+archive:
+
+here are some snippets for CMakeLists.txt from testing to set Orientations and FullScreen.
+Unfortunately doesn't work now, but perhaps in a future release ?
+
+if(MY_APP_USES_IPHONE)
+    set(MY_IPHONE_PORTRAIT_NORMAL OFF)
+    set(MY_IPHONE_LANDSCAPE_LEFT ON)
+    set(MY_IPHONE_LANDSCAPE_RIGHT ON)
+endif()
+if(MY_APP_USES_IPAD)
+    set(MY_IPAD_PORTRAIT_NORMAL ON)
+    set(MY_IPAD_PORTRAIT_UP_DOWN ON)
+    set(MY_IPAD_LANDSCAPE_LEFT ON)
+    set(MY_IPAD_LANDSCAPE_RIGHT ON)
+endif()
+...
+# ORIENTATION
+if(MY_APP_USES_IPHONE)
+    if(MY_IPHONE_PORTRAIT_NORMAL)
+        set(MY_IPHONE_Portrait
+            "UIInterfaceOrientationPortrait")
+    endif()
+    if(MY_IPHONE_LANDSCAPE_LEFT)
+        set(MY_IPHONE_LandscapeLeft
+            "UIInterfaceOrientationLandscapeLeft")
+    endif()
+    if(MY_IPHONE_LANDSCAPE_RIGHT)
+        set(MY_IPHONE_LandscapeRight
+            "UIInterfaceOrientationLandscapeRight")
+    endif()
+endif()
+if(MY_APP_USES_IPAD)
+    if(MY_IPAD_PORTRAIT_NORMAL)
+        set(MY_IPAD_Portrait
+            "UIInterfaceOrientationPortrait")
+    endif()
+    if(MY_IPAD_PORTRAIT_UP_DOWN)
+        set(MY_IPAD_PortraitUpsideDown
+            "UIInterfaceOrientationPortraitUpsideDown")
+    endif()
+    if(MY_IPAD_LANDSCAPE_LEFT)
+        set(MY_IPAD_LandscapeLeft
+            "UIInterfaceOrientationLandscapeLeft")
+    endif()
+    if(MY_IPAD_LANDSCAPE_RIGHT)
+        set(MY_IPAD_LandscapeRight
+            "UIInterfaceOrientationLandscapeRight")
+    endif()
+endif()
+...
+message(STATUS "PHONE_P: ${MY_IPHONE_Portrait}")
+message(STATUS "PHONE_LL: ${MY_IPHONE_LandscapeLeft}")
+message(STATUS "PHONE_LR: ${MY_IPHONE_LandscapeRight}")
+message(STATUS "IPAD_P: ${MY_IPAD_Portrait}")
+message(STATUS "IPAD_PD: ${MY_IPAD_PortraitUpsideDown}")
+message(STATUS "IPAD_LL: ${MY_IPAD_LandscapeLeft}")
+message(STATUS "IPAD_LR: ${MY_IPAD_LandscapeRight}")
+...
+XCODE_ATTRIBUTE_INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad
+    "${MY_IPAD_Portrait} ${MY_IPAD_PortraitUpsideDown} ${MY_IPAD_LandscapeLeft} ${MY_IPAD_LandscapeRight"
+XCODE_ATTRIBUTE_INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone
+    "${MY_IPHONE_Portrait} ${MY_IPHONE_LandscapeLeft} ${MY_IPHONE_LandscapeRight}"
+------
+
+

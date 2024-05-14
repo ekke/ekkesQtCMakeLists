@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Written on Mon Feb 5 17:21:12 2024 by Qt Creator 11.0.2-->
+<externaltool id="FileNames__ios_src_">
+    <description>Collects filenames from ios/src files</description>
+    <displayname>FileNames (ios/src)</displayname>
+    <category>CMake</category>
+    <order>7</order>
+    <executable output="showinpane" error="showinpane" modifiesdocument="no">
+        <path>/Applications/daten/_QT/QtCreator-ExternalTools/my_ios_objc_source_files.sh</path>
+        <arguments>%{CurrentDocument:Project:Path}</arguments>
+        <workingdirectory>%{CurrentDocument:Project:Path}</workingdirectory>
+    </executable>
+</externaltool>

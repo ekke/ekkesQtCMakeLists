@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Written on Fri Jan 26 17:30:58 2024 by Qt Creator 11.0.2-->
+<externaltool id="FileNames__cpp_android_">
+    <description>Collects filenames from cpp/android files</description>
+    <displayname>FileNames (cpp/android)</displayname>
+    <category>CMake</category>
+    <order>5</order>
+    <executable output="showinpane" error="showinpane" modifiesdocument="no">
+        <path>/Applications/daten/_QT/QtCreator-ExternalTools/my_android_cpp_source_files.sh</path>
+        <arguments>%{CurrentDocument:Project:Path}</arguments>
+        <workingdirectory>%{CurrentDocument:Project:Path}</workingdirectory>
+    </executable>
+</externaltool>

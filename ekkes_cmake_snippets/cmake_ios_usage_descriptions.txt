@@ -1,0 +1,45 @@
+cmake_ios_usage_descriptions.txt
+2024-05-14
+
+some more usage descriptions ekke is using
+
+-- ekke's defaults in CMakeLists.txt matching most use-cases in ekke's apps:
+# USAGE DESCRIPTIONS
+if(MY_APP_USES_BLUETOOTH)
+    set(MY_BLE_PERIPHERAL_USAGE_DESCRIPTION
+    "${MY_DISPLAY_NAME} searches Bluetooth LE Devices for Barcode Scanner"
+    )
+    set(MY_BLE_ALWAYS_USAGE_DESCRIPTION
+    "${MY_DISPLAY_NAME} uses Bluetooth LE Barcode Scanner"
+    )
+endif()
+if(MY_APP_USES_MULTIMEDIA_CAMERA_NATIVE_FILE_DIALOG)
+    set(MY_PHOTO_LIB_USAGE_DESCRIPTION
+    "${MY_DISPLAY_NAME} uses Photos"
+    )
+    set(MY_CAMERA_USAGE_DESCRIPTION
+    "${MY_DISPLAY_NAME} requires access to your Phone’s Camera."
+    )
+endif()
+
+-- some alternate usage descriptions
+MY_BLE_PERIPHERAL_USAGE_DESCRIPTION
+"${MY_DISPLAY_NAME} searches Bluetooth LE Devices for WaiterLocks."
+"${MY_DISPLAY_NAME} searches Bluetooth LE Devices for Lattoflex Beds with BedControlAdapter."
+"${MY_DISPLAY_NAME} searches Bluetooth LE Devices for eGK Readers."
+
+MY_BLE_ALWAYS_USAGE_DESCRIPTION
+"${MY_DISPLAY_NAME} can use a Bluetooth LE Waiterlock for easy Login if iPad shared by Team Members."
+"${MY_DISPLAY_NAME} uses Bluetooth LE to control Motorpositions of Lattoflex Beds."
+"${MY_DISPLAY_NAME} can read data from eGK using Bluetooth LE Reader."
+
+MY_PHOTO_LIB_USAGE_DESCRIPTION
+"${MY_DISPLAY_NAME} verwendet Fotos zum Upload."
+
+MY_CAMERA_USAGE_DESCRIPTION
+"${MY_DISPLAY_NAME} möchte auf Deine Kamera zugreifen."
+
+
+
+-- OPEN -- TODO
+Localize Property List Values (Usage Descriptions)

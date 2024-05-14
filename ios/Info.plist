@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <key>CFBundleName</key>
+    <string>${MY_BUNDLE_NAME}</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>${MY_DISPLAY_NAME}</string>
+
+    <key>CFBundleIdentifier</key>
+    <string>${MY_UNIQUE_ID_IOS}</string>
+
+    <key>CFBundleExecutable</key>
+    <string>${MY_EXECUTABLE_NAME}</string>
+
+    <key>CFBundleVersion</key>
+    <string>${MY_APP_VERSION}</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string>${MY_MARKETING_VERSION}</string>
+
+    <key>CFBundleAllowMixedLocalizations</key>
+    <true/>
+
+    <key>NSHumanReadableCopyright</key>
+    <string>${MY_COPYRIGHT}</string>
+
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+
+    <key>NSHighResolutionCapable</key>
+    <true/>
+
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>${MY_BLE_PERIPHERAL_USAGE_DESCRIPTION}</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>${MY_BLE_ALWAYS_USAGE_DESCRIPTION}</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>${MY_PHOTO_LIB_USAGE_DESCRIPTION}</string>
+    <key>NSCameraUsageDescription</key>
+    <string>${MY_CAMERA_USAGE_DESCRIPTION}</string>
+
+    <key>UILaunchStoryboardName</key>
+    <string>${MY_STORYBOARD_NAME}</string>
+
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+    <string>UIInterfaceOrientationPortrait</string>
+    <string>UIInterfaceOrientationPortraitUpsideDown</string>
+    <string>UIInterfaceOrientationLandscapeLeft</string>
+    <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UIRequiresFullScreen</key>
+    <true/>
+
+</dict>
+</plist>

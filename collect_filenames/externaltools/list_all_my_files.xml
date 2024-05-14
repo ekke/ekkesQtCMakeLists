@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Written on Tue Jan 23 11:23:59 2024 by Qt Creator 11.0.2-->
+<externaltool id="list_all_my_files">
+    <description>Collects filenames from cpp, images, qml</description>
+    <displayname>list all my files</displayname>
+    <category>CMake</category>
+    <order>10</order>
+    <executable output="showinpane" error="showinpane" modifiesdocument="no">
+        <path>/Applications/daten/_QT/QtCreator-ExternalTools/all_my_files.sh</path>
+        <arguments>%{CurrentDocument:Project:Path}</arguments>
+        <workingdirectory>%{CurrentDocument:Project:Path}</workingdirectory>
+    </executable>
+</externaltool>
