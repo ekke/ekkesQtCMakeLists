@@ -1,0 +1,553 @@
+# ekke's CMakeLists example for mobile Apps (Android, iOS)
+# Host: macOS
+#
+# 2024-05-17
+# 0.9
+#
+# Author: Ekkehard Gentz (ekke) - Independent
+# @ekkescorner (X - aka Twitter)
+# @ekke (Qt Discord Server)
+# LinkedIn: http://linkedin.com/in/ekkehard/
+# GitHub: https://github.com/ekke
+# Qt6 blog: https://ekkesapps.wordpress.com/
+
+# Compact Version without explaining comments 
+
+
+# ####  C M A K E   ####
+
+cmake_minimum_required(VERSION 3.24)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTORCC ON)
+
+# #### V A R I A B L E S ####
+
+set(MY_QT_VERSION "6.7")
+set(MY_APP "c2gQtWS_x")
+
+set(MY_DISPLAY_NAME "QtWS")
+set(MY_COPYRIGHT "(c) 2024 Ekkehard Gentz, Rosenheim")
+set(MY_DOMAIN "org.ekkescorner")
+set(MY_UNIQUE_ID_ANDROID "${MY_DOMAIN}.c2g.qtws")
+set(MY_UNIQUE_ID_IOS "${MY_DOMAIN}.c2g.qtws")
+set(MY_APP_VERSION "2.3.0")
+
+string(REGEX MATCH "^[0-9]+" MY_MAJOR_VERSION "${MY_APP_VERSION}")
+string(REGEX MATCH "([0-9]+)$" MY_PATCH_VERSION "${MY_APP_VERSION}")
+string(REGEX REPLACE "^[0-9]+\\.([0-9]+)\\.[0-9]+$" "\\1" MY_MINOR_VERSION "${MY_APP_VERSION}")
+set(MY_MARKETING_VERSION ${MY_MAJOR_VERSION}.${MY_MINOR_VERSION})
+
+set(EKKES_PROJECT_STRUCTURE ON)
+if(EKKES_PROJECT_STRUCTURE)
+    set(MY_MAIN_MODULE_URI "Ekke.Apps.Main")
+else()
+    set(MY_MAIN_MODULE_URI "Example.Apps.Main")
+endif()
+
+set(MY_APP_USES_TRANSLATIONS ON)
+set(MY_APP_USES_NETWORK ON)
+set(MY_APP_USES_BLUETOOTH OFF)
+set(MY_APP_USES_MULTIMEDIA_CAMERA OFF)
+set(MY_APP_USES_NATIVE_FILE_DIALOG OFF)
+set(MY_APP_USES_SHARING OFF)
+set(MY_APP_USES_MOBILE_UI ON)
+
+set(MY_MIN_API 26)
+set(MY_TARGET_API 34)
+
+# ----- SOME   I O S   - ONLY - VARIABLES NEEDED BELOW  -----
+
+set(MY_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/ios/Info.plist")
+set(MY_APP_USES_IPHONE ON)
+set(MY_APP_USES_IPAD ON)
+
+if(MY_APP_USES_BLUETOOTH)
+    set(MY_BLE_PERIPHERAL_USAGE_DESCRIPTION
+    "${MY_DISPLAY_NAME} searches Bluetooth LE Devices for Barcode Scanner"
+    )
+    set(MY_BLE_ALWAYS_USAGE_DESCRIPTION
+    "${MY_DISPLAY_NAME} uses Bluetooth LE Barcode Scanner"
+    )
+endif()
+if(MY_APP_USES_MULTIMEDIA_CAMERA)
+    set(MY_CAMERA_USAGE_DESCRIPTION
+    "${MY_DISPLAY_NAME} requires access to your Phone’s Camera."
+    )
+endif()
+if(MY_APP_USES_NATIVE_FILE_DIALOG)
+    set(MY_PHOTO_LIB_USAGE_DESCRIPTION
+    "${MY_DISPLAY_NAME} uses Photos"
+    )
+endif()
+if(MY_APP_USES_SHARING)
+    # ToDo trying to set via XCODE_ATTRIBUTEs
+    # ATM please insert CFBundleDocumentTypes manually into info.plist
+    # see my_cmake_snippets/cmake_ios_sharing.txt
+endif()
+
+set(MY_BUNDLE_NAME ${MY_DISPLAY_NAME})
+set(MY_EXECUTABLE_NAME ${MY_APP})
+set(MY_STORYBOARD_NAME "MyLaunchScreen")
+set(MY_APP_ICON_NAME "AppIcon")
+
+# APP CATEGORY
+# select one of the categories:
+# "business" "developer-tools" "education" "entertainment" "finance"
+# "games" "graphics-design" "healthcare-fitness" "lifestyle" "medical"
+# "music" "news" "photography" "productivity" "reference" "social-networking"
+# "sports" "travel" "utilities" "video" "weather"
+set(MY_APP_CATEGORY "developer-tools")
+
+# #### P R O J E C T   P R O P E R T I E S ####
+
+project(${MY_APP} VERSION ${MY_APP_VERSION} LANGUAGES CXX)
+
+find_package(Qt6 ${MY_QT_VERSION} REQUIRED COMPONENTS
+    Core
+    Gui
+    Qml
+    Quick
+    QuickControls2
+)
+
+if(MY_APP_USES_NETWORK)
+    find_package(Qt6 ${MY_QT_VERSION} REQUIRED COMPONENTS
+        Network
+    )
+endif()
+if(MY_APP_USES_BLUETOOTH)
+    find_package(Qt6 ${MY_QT_VERSION} REQUIRED COMPONENTS
+        Bluetooth
+    )
+endif()
+if(MY_APP_USES_MULTIMEDIA_CAMERA)
+    find_package(Qt6 ${MY_QT_VERSION} REQUIRED COMPONENTS
+        Multimedia
+    )
+endif()
+
+if(MY_APP_USES_TRANSLATIONS)
+    qt_standard_project_setup(
+        REQUIRES ${MY_QT_VERSION}
+        I18N_TRANSLATED_LANGUAGES de en fr
+    )
+else()
+    qt_standard_project_setup(
+        REQUIRES ${MY_QT_VERSION}
+    )
+endif()
+
+if(MY_APP_USES_TRANSLATIONS)
+    set (ALL_MY_LANGUAGES
+        ${QT_I18N_SOURCE_LANGUAGE}
+        ${QT_I18N_TRANSLATED_LANGUAGES}
+    )
+    # en can be duplicated (in source and translated language)
+    list(REMOVE_DUPLICATES ALL_MY_LANGUAGES)
+    set(MY_LANGUAGE_TS_FILES "")
+    foreach(lang ${ALL_MY_LANGUAGES})
+      list(APPEND MY_LANGUAGE_TS_FILES "translations/${MY_APP}_${lang}.ts")
+    endforeach()
+    message(STATUS "MY_LANGUAGE_TS_FILES: ${MY_LANGUAGE_TS_FILES}")
+endif()
+
+if(EKKES_PROJECT_STRUCTURE)
+    include_directories(
+        cpp
+        cpp/gen
+    )
+    if(ANDROID)
+        include_directories(
+            cpp/android
+        )
+    endif()
+    if(IOS)
+        include_directories(
+            cpp/ios
+        )
+    endif()
+    if(MY_APP_USES_BLUETOOTH)
+        include_directories(
+            cpp/bt
+        )
+    endif()
+    if(MY_APP_USES_MULTIMEDIA_CAMERA)
+        include_directories(
+            cpp/photo
+        )
+    endif()
+endif()
+
+# #### M A I N   T A S K S ####
+
+include(ekkesLists/my_qml_files.cmake OPTIONAL)
+include(ekkesLists/my_qmldir_files.cmake OPTIONAL)
+include(ekkesLists/my_cpp_files.cmake OPTIONAL)
+if(ANDROID)
+    include(ekkesLists/my_android_cpp_files.cmake OPTIONAL)
+endif()
+if(IOS)
+    include(ekkesLists/my_ios_cpp_files.cmake OPTIONAL)
+    include(ekkesLists/my_ios_objc_files.cmake OPTIONAL)
+endif()
+include(ekkesLists/my_image_files.cmake OPTIONAL)
+include(ekkesLists/my_data-assets_files.cmake OPTIONAL)
+include (ekkesLists/my_js_files.cmake OPTIONAL)
+
+# ----- E X E C U T A B L E  +  M A I N   Q M L  M O D U L E
+
+if(EKKES_PROJECT_STRUCTURE)
+    qt_add_executable(${MY_APP}
+        cpp/main.cpp
+    )
+    qt_add_qml_module(${MY_APP}
+        URI ${MY_MAIN_MODULE_URI}
+
+        QML_FILES
+            ${my_qml_files}
+            ${my_js_files}
+
+        SOURCES
+            ${my_cpp_files}
+
+        RESOURCES
+            ${my_image_files}
+            ${my_data-assets_files}
+    )
+endif()
+
+if(NOT EKKES_PROJECT_STRUCTURE)
+    set(my_qml_files ${my_qml_files}
+        Main.qml
+    )
+    qt_add_executable(${MY_APP}
+        main.cpp
+    )
+    qt_add_qml_module(${MY_APP}
+        URI ${MY_MAIN_MODULE_URI}
+
+        QML_FILES
+            ${my_qml_files}
+
+        SOURCES
+            ${my_cpp_files}
+
+        RESOURCES
+            ${my_image_files}
+    )
+endif()
+
+# ----- O T H E R   F I L E S
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.gitignore)
+    set(ekkes_other_files ${ekkes_other_files}
+       .gitignore
+    )
+endif()
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
+    set(ekkes_other_files ${ekkes_other_files}
+       README.md
+    )
+endif()
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/AUTHOR.md)
+    set(ekkes_other_files ${ekkes_other_files}
+       AUTHOR.md
+    )
+endif()
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE)
+    set(ekkes_other_files ${ekkes_other_files}
+       LICENSE
+    )
+endif()
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/gen-model/qt_ws.dtos)
+    set(ekkes_other_files ${ekkes_other_files}
+       gen-model/qt_ws.dtos
+    )
+endif()
+
+if(IOS)
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ios/QMake_Info.plist)
+        set(ekkes_other_files ${ekkes_other_files}
+            ios/QMake_Info.plist
+        )
+    endif()
+endif()
+
+if(IOS)
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ekkes_cmake_snippets/cmake_ios_usage_descriptions.txt)
+        set(ekkes_other_files ${ekkes_other_files}
+            ekkes_cmake_snippets/cmake_ios_usage_descriptions.txt
+        )
+    endif()
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ekkes_cmake_snippets/cmake_ios_orientation.txt)
+        set(ekkes_other_files ${ekkes_other_files}
+            ekkes_cmake_snippets/cmake_ios_orientation.txt
+        )
+    endif()
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ekkes_cmake_snippets/cmake_ios_sharing.txt)
+        set(ekkes_other_files ${ekkes_other_files}
+            ekkes_cmake_snippets/cmake_ios_sharing.txt
+        )
+    endif()
+endif()
+
+set(ekkesLists
+    ekkesLists/my_qml_files.cmake
+    ekkesLists/my_cpp_files.cmake
+    ekkesLists/my_image_files.cmake
+)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ekkesLists/my_data-assets_files.cmake)
+    set(ekkesLists ${ekkesLists}
+        ekkesLists/my_data-assets_files.cmake
+    )
+endif()
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ekkesLists/my_js_files.cmake)
+    set(ekkesLists ${ekkesLists}
+        ekkesLists/my_js_files.cmake
+    )
+endif()
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ekkesLists/my_qmldir_files.cmake)
+    set(ekkesLists ${ekkesLists}
+        ekkesLists/my_qmldir_files.cmake
+    )
+endif()
+
+add_custom_target(ekkes_other_files SOURCES
+   ${ekkes_other_files}
+   ${ekkesLists}
+   ${MY_LANGUAGE_TS_FILES}
+)
+
+# ----- T R A N S L A T I O N   ---   Qt 6.7
+
+if(MY_APP_USES_TRANSLATIONS)
+    find_package(Qt6 ${MY_QT_VERSION} REQUIRED COMPONENTS
+        LinguistTools
+    )
+    set_source_files_properties(
+        ${MY_LANGUAGE_TS_FILES}
+        PROPERTIES OUTPUT_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/translations"
+    )
+    qt_add_translations(${MY_APP}
+        TS_FILE_DIR "translations"
+        RESOURCE_PREFIX "/"
+        NO_GENERATE_PLURALS_TS_FILE
+    )
+endif()
+
+# ####  P L A T F O R M   S P E C I F I C  ####
+
+# -----  A N D R O I D  -----
+
+if(ANDROID)
+    if(ANDROID_ABI STREQUAL "armeabi-v7a")
+        set(MY_ARCH 0)
+    elseif(ANDROID_ABI STREQUAL "arm64-v8a")
+        set(MY_ARCH 1)
+    else()
+        set(MY_ARCH 2)
+    endif()
+
+    # Function to add leading zeros:
+    function(pad_leading_zero number output)
+        if(${number} LESS 10)
+            set(${output} "0${number}" PARENT_SCOPE)
+        else()
+            set(${output} "${number}" PARENT_SCOPE)
+        endif()
+    endfunction()
+    # Add leading zeros and create MY_APP_CODE
+    pad_leading_zero(${MY_MAJOR_VERSION} MY_MAJOR_VERSION_PADDED)
+    pad_leading_zero(${MY_MINOR_VERSION} MY_MINOR_VERSION_PADDED)
+    set(MY_APP_CODE "${MY_MIN_API}${MY_ARCH}0${MY_MAJOR_VERSION_PADDED}${MY_MINOR_VERSION_PADDED}${MY_PATCH_VERSION}")
+
+    # Important ANDROID   P R O P E R T I E S
+
+    set(QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android)
+    set(QT_ANDROID_MIN_SDK_VERSION ${MY_MIN_API})
+    set(QT_ANDROID_TARGET_SDK_VERSION ${MY_TARGET_API})
+    set(QT_ANDROID_VERSION_NAME ${MY_APP_VERSION})
+    set(QT_ANDROID_VERSION_CODE ${MY_APP_CODE})
+
+    set_target_properties(${MY_APP}
+        PROPERTIES
+        QT_ANDROID_PACKAGE_SOURCE_DIR ${QT_ANDROID_PACKAGE_SOURCE_DIR}
+        QT_ANDROID_MIN_SDK_VERSION ${QT_ANDROID_MIN_SDK_VERSION}
+        QT_ANDROID_TARGET_SDK_VERSION ${QT_ANDROID_TARGET_SDK_VERSION}
+        ##QT_ANDROID_PACKAGE_NAME ${QT_ANDROID_PACKAGE_NAME}
+        QT_ANDROID_VERSION_NAME ${QT_ANDROID_VERSION_NAME}
+        QT_ANDROID_VERSION_CODE ${QT_ANDROID_VERSION_CODE}
+    )
+endif()
+if(APPLE)
+    set_target_properties(${MY_APP} PROPERTIES
+        MACOSX_BUNDLE TRUE
+        MACOSX_BUNDLE_INFO_PLIST ${MY_INFO_PLIST}
+        MACOSX_BUNDLE_BUNDLE_NAME ${MY_BUNDLE_NAME}
+        MACOSX_BUNDLE_GUI_IDENTIFIER ${MY_UNIQUE_ID_IOS}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${MY_APP_VERSION}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${MY_MARKETING_VERSION}
+        MACOSX_BUNDLE_COPYRIGHT ${MY_COPYRIGHT}
+    )
+endif()
+if(IOS)
+    if(MY_APP_USES_IPHONE AND MY_APP_USES_IPAD)
+        set(MY_DEVICE_FAMILY "1,2")
+    elseif(MY_APP_USES_IPHONE)
+        set(MY_DEVICE_FAMILY "1")
+    elseif(MY_APP_USES_IPAD)
+        set(MY_DEVICE_FAMILY "2")
+    endif()
+    set(my_ios_resource_assets
+        "${CMAKE_CURRENT_SOURCE_DIR}/ios/${MY_STORYBOARD_NAME}.storyboard"
+        "${CMAKE_CURRENT_SOURCE_DIR}/ios/Assets.xcassets"
+        "${CMAKE_CURRENT_SOURCE_DIR}/ios/MyStoryboardImage.png"
+    )
+
+    target_sources(${MY_APP} PRIVATE ${my_ios_resource_assets})
+    set_source_files_properties(${my_ios_resource_assets}
+        PROPERTIES
+            MACOSX_PACKAGE_LOCATION Resources
+    )
+
+    set_target_properties(${MY_APP} PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST    "${MY_INFO_PLIST}"
+        QT_IOS_LAUNCH_SCREEN    "${CMAKE_CURRENT_SOURCE_DIR}/ios/${MY_STORYBOARD_NAME}.storyboard"
+        XCODE_ATTRIBUTE_INFOPLIST_KEY_UILaunchStoryboardName    ${MY_STORYBOARD_NAME}
+        XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME  ${MY_APP_ICON_NAME}
+        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER   ${MY_UNIQUE_ID_IOS}
+        XCODE_ATTRIBUTE_PRODUCT_NAME    ${MY_APP}
+        XCODE_ATTRIBUTE_INFOPLIST_KEY_CFBundleDisplayName   ${MY_DISPLAY_NAME}
+        XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY ${MY_DEVICE_FAMILY}
+        XCODE_ATTRIBUTE_INFOPLIST_KEY_LSApplicationCategoryType "public.app-category.${MY_APP_CATEGORY}"
+        XCODE_ATTRIBUTE_CURRENT_PROJECT_VERSION ${MY_APP_VERSION}
+        XCODE_ATTRIBUTE_MARKETING_VERSION   ${MY_MARKETING_VERSION}
+        XCODE_ATTRIBUTE_INFOPLIST_KEY_NSHumanReadableCopyright  ${MY_COPYRIGHT}
+    )
+
+    if(MY_APP_USES_BLUETOOTH)
+        set_target_properties(${MY_APP} PROPERTIES
+            XCODE_ATTRIBUTE_INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription  "${MY_BLE_PERIPHERAL_USAGE_DESCRIPTION}"
+            XCODE_ATTRIBUTE_INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription  "${MY_BLE_ALWAYS_USAGE_DESCRIPTION}"
+        )
+    endif()
+    if(MY_APP_USES_MULTIMEDIA_CAMERA)
+        set_target_properties(${MY_APP} PROPERTIES
+            XCODE_ATTRIBUTE_INFOPLIST_KEY_NSCameraUsageDescription  "${MY_CAMERA_USAGE_DESCRIPTION}"
+        )
+    endif()
+    if(MY_APP_USES_NATIVE_FILE_DIALOG)
+        set_target_properties(${MY_APP} PROPERTIES
+            XCODE_ATTRIBUTE_INFOPLIST_KEY_NSPhotoLibraryUsageDescription  "${MY_PHOTO_LIB_USAGE_DESCRIPTION}"
+        )
+    endif()
+endif()
+
+if(WIN32)
+    set_target_properties(${MY_APP} PROPERTIES
+        WIN32_EXECUTABLE TRUE
+    )
+endif()
+
+# ####  F I N A L   S T E P S  ####
+
+if(MY_APP_USES_MOBILE_UI)
+    if(IOS)
+        target_link_libraries(${MY_APP} PRIVATE
+            Qt6::GuiPrivate
+            "-framework UIKit"
+        )
+    endif()
+    add_subdirectory(../../_qt_ws/MobileUI ../../_qt_ws/MobileUI)
+    target_link_libraries(${MY_APP} PRIVATE
+        MobileUI
+    )
+
+endif()
+
+if(ANDROID)
+    if(MY_APP_USES_NETWORK)
+        include(/Applications/daten/_android_sdk_tools/android_openssl/android_openssl.cmake)
+        add_android_openssl_libraries(${MY_APP})
+    endif()
+endif()
+
+# ----- L I N K I N G  -----
+
+target_link_libraries(${MY_APP}
+    PRIVATE
+        Qt6::Gui
+        Qt6::Qml
+        Qt6::Quick
+        Qt6::QuickControls2
+)
+if(MY_APP_USES_NETWORK)
+    target_link_libraries(${MY_APP}
+    PRIVATE
+        Qt6::Network
+    )
+endif()
+if(MY_APP_USES_BLUETOOTH)
+    target_link_libraries(${MY_APP}
+    PRIVATE
+        Qt6::Bluetooth
+    )
+endif()
+if(MY_APP_USES_MULTIMEDIA_CAMERA)
+    target_link_libraries(${MY_APP}
+    PRIVATE
+        Qt6::Multimedia
+    )
+endif()
+if(MY_APP_USES_NATIVE_FILE_DIALOG)
+    if(IOS)
+        qt_import_plugins(${MY_APP}
+            INCLUDE
+            Qt::QIosOptionalPlugin_NSPhotoLibraryPlugin
+        )
+        target_link_libraries(${MY_APP}
+        PRIVATE
+            # "-framework Photos"
+            # "-framework AVFoundation"
+        )
+    endif()
+endif()
+if(MY_APP_USES_SHARING OR MY_APP_USES_NATIVE_FILE_DIALOG)
+    if(ANDROID)
+        target_link_libraries(${MY_APP}
+        PRIVATE
+            Qt6::CorePrivate
+        )
+    endif()
+endif()
+
+# ToDo  SOMETHING SPECIAL ? - MORE FRAMEWORKS NEEDED ?
+if(IOS)
+    # Security needed for RSA ObjC classes
+    target_link_libraries(${MY_APP}
+    PRIVATE
+        # "-framework Security"
+    )
+endif()
+
+# ----- I N S T A L L  -----
+
+include(GNUInstallDirs)
+
+install(TARGETS ${MY_APP}
+    # Bundle used by macOS
+    BUNDLE  DESTINATION .
+    # Library Destination used by Android
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+qt_generate_deploy_qml_app_script(
+    TARGET ${MY_APP}
+    OUTPUT_SCRIPT deploy_script
+    MACOS_BUNDLE_POST_BUILD
+    NO_UNSUPPORTED_PLATFORM_ERROR
+    DEPLOY_USER_QML_MODULES_ON_UNSUPPORTED_PLATFORM
+)
+install(SCRIPT ${deploy_script})
+
+# ---------------------------- this is the end, my friend --------------
