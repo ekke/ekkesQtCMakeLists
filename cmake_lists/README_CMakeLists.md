@@ -1,9 +1,9 @@
 ### CMakeLists
 From this folder you can download different versions of CMakeLists.txt. All variables set for ekke's QtWS Conference App.
 
-* CMakeLists.txt (with detailed comments)
-* CMakeLists.txt.pdf (same as PDF)
-* CMakeLists_compact.txt (without comments)
+* ekke's CMakeLists.txt with detailed comments
+* same as PDF
+* same compact without comments
 
 Learn more about ekke's CMakeLists.txt:
 
