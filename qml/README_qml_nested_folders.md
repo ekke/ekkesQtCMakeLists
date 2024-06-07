@@ -4,11 +4,7 @@ You organized your QML files into  nested directories, where subdirs are NO modu
 
 Then there are some problems. Read [qt\_add\_qml\_module](https://t1p.de/ekkeCMakeQMLModule) and see discussions at [Bug 111763](https://bugreports.qt.io/browse/QTBUG-111763)
 
-**qmldir** only contains a single line:
-```import Ekke.Apps.Main auto```
-
-If you want to test if this helps to get implicit import of your module in QML subdirs, then change the import to your QML Module URI.
-Copy qmldir into all your qml subdirs of your project, but not at the root level - the qmldir there will be generated into your build dir from tooling. With Qt 6.8 hopefully tooling will also generate all the qmldir into nested folders:
+Wait for 6.8 to test if tooling will generate qmldir into nested folders to get implicit import of your URL for all nested QML folders:
 ```import Ekke.Apps.Main auto```
 ```prefer :/qt/qml/Ekke/Apps/Main/```
 

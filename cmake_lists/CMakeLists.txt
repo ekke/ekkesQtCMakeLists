@@ -1,8 +1,8 @@
 # ekke's CMakeLists example for mobile Apps (Android, iOS)
 # Host: macOS
 #
-# 2024-05-17
-# 0.9
+# 2024-06-07
+# 0.9.1
 #
 # Author: Ekkehard Gentz (ekke) - Independent
 # @ekkescorner (X - aka Twitter)
@@ -158,6 +158,10 @@ set(CMAKE_AUTORCC ON)
 # ----- SOME VARIABLES NEEDED BELOW -----
 
 # The QT VERSION
+# to test nested QML directories
+# see https://bugreports.qt.io/browse/QTBUG-111763
+# qt_standard_project_setup must require 6.8 !
+# set(MY_QT_VERSION "6.8")
 set(MY_QT_VERSION "6.7")
 
 # My APP TARGET
@@ -402,6 +406,9 @@ endif()
 # STANDARD PROJECT SETUP
 
 # sets CMAKE_AUTOMOC and CMAKE_AUTOUIC as true
+
+# for nested QML directories Qt #6.8 required
+
 # sets I18N languages (Qt 6.7 required)
 # ekke's apps need full translation of the source language,
 # so 'en' is included in I18N_TRANSLATED_LANGUAGES
@@ -409,6 +416,7 @@ endif()
 #     I18N_SOURCE_LANGUAGE en
 #     I18N_TRANSLATED_LANGUAGES de fr
 # https://doc.qt.io/qt-6/qtlinguist-cmake-qt-add-translations.html#plural-forms
+
 if(MY_APP_USES_TRANSLATIONS)
     qt_standard_project_setup(
         REQUIRES ${MY_QT_VERSION}
@@ -494,13 +502,6 @@ endif()
 # QML Files - sets ${my_qml_files}
 include(ekkesLists/my_qml_files.cmake OPTIONAL)
 
-# RESOURCES (QMLDIR) Files - sets ${my_qmldir_files}
-# W I P: TEMP solution to support qml in subfolders
-# Probably supported with Qt 6.8
-# qmldir simply imports URI from QML Module, per ex:
-#     import Ekke.Apps.Main auto
-include(ekkesLists/my_qmldir_files.cmake OPTIONAL)
-
 # CPP Files - sets ${my_cpp_files}
 include(ekkesLists/my_cpp_files.cmake OPTIONAL)
 if(ANDROID)
@@ -578,11 +579,8 @@ if(EKKES_PROJECT_STRUCTURE)
         RESOURCES
             ${my_image_files}
             ${my_data-assets_files}
-            # ekke ToDo
             # https://bugreports.qt.io/browse/QTBUG-111763
-            # (temp solution before 6.8)
-            # W I P
-            # ${my_qmldir_files}
+            # Qtb 6.8: Qt should automatically create qmldir files for nested dirs
     )
 endif()
 
@@ -611,7 +609,6 @@ if(NOT EKKES_PROJECT_STRUCTURE)
 endif()
 
 #message(STATUS "my_qml_files: ${my_qml_files}")
-#message(STATUS "my_qmldir_files: ${my_qmldir_files}")
 #message(STATUS "my_js_files: ${my_js_files}")
 #message(STATUS "my_cpp_files: ${my_cpp_files}")
 #message(STATUS "my_image_files: ${my_image_files}")
@@ -700,11 +697,6 @@ endif()
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ekkesLists/my_js_files.cmake)
     set(ekkesLists ${ekkesLists}
         ekkesLists/my_js_files.cmake
-    )
-endif()
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ekkesLists/my_qmldir_files.cmake)
-    set(ekkesLists ${ekkesLists}
-        ekkesLists/my_qmldir_files.cmake
     )
 endif()
 

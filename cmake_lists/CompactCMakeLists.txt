@@ -1,8 +1,8 @@
 # ekke's CMakeLists example for mobile Apps (Android, iOS)
 # Host: macOS
 #
-# 2024-05-17
-# 0.9
+# 2024-06-07
+# 0.9.1
 #
 # Author: Ekkehard Gentz (ekke) - Independent
 # @ekkescorner (X - aka Twitter)
@@ -181,7 +181,6 @@ endif()
 # #### M A I N   T A S K S ####
 
 include(ekkesLists/my_qml_files.cmake OPTIONAL)
-include(ekkesLists/my_qmldir_files.cmake OPTIONAL)
 include(ekkesLists/my_cpp_files.cmake OPTIONAL)
 if(ANDROID)
     include(ekkesLists/my_android_cpp_files.cmake OPTIONAL)
@@ -304,11 +303,6 @@ endif()
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ekkesLists/my_js_files.cmake)
     set(ekkesLists ${ekkesLists}
         ekkesLists/my_js_files.cmake
-    )
-endif()
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ekkesLists/my_qmldir_files.cmake)
-    set(ekkesLists ${ekkesLists}
-        ekkesLists/my_qmldir_files.cmake
     )
 endif()
 
