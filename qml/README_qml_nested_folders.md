@@ -8,7 +8,14 @@ Wait for 6.8 to test if tooling will generate qmldir into nested folders to get 
 ```import Ekke.Apps.Main auto```
 ```prefer :/qt/qml/Ekke/Apps/Main/```
 
+*edit 2024-06-22:* 
+tested 6.8 Beta1. ```qmldir``` files are generated, but it still doesn't work as expected.
 
+see discussion at [Bug 126504](https://bugreports.qt.io/browse/QTBUG-126504), where you also find an example app to test nested QML files behaviour. 
+also QtCreator 14.0.0 Beta1 using ```QML Language Server``` doesn't recognize all the new things.
+stay tuned...
+
+---
 ekke's blog posts around CMake and Mobile Apps (Qt 6.7+): [ekke's CMake articles overview](https://t1p.de/ekkeCMakeMobileApps)
 
 ---
